@@ -1,0 +1,42 @@
+<div class="open-modal animation fadeIn" *ngIf="modalService.modal">
+<div *ngIf="modalService.modal" class="modal" tabindex="-1" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button type="button" (click)="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+              <ul *ngIf="cliente" class="list-group text-dark mb-3">
+                <li class="list-group-item active">{{ cliente.name }}</li>
+                <li class="list-group-item">{{ cliente.lastname }}</li>
+                <li class="list-group-item">{{ cliente.email }}</li>
+                <li class="list-group-item">{{ cliente.createAt | date:"fullDate" }}</li>
+                <li class="list-group-item">{{ cliente.region.name }}</li>
+              </ul>
+              <div class="input-group mb-3">
+                <input (change)="selectPhoto($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <button (click)="uploadPhoto()" [disabled]="!selectedPhoto" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Subir</button>
+              </div>
+              <div *ngIf="progress > 0" class="progress" style="height: 40px;">
+                <div class="progress-bar progress-bar-striped" role="progressbar" aria-label="Default striped example" [ngStyle]="{width:progress+'%'}" attr.aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">
+                  {{ progress }}%
+                </div>
+              </div>
+            </div>
+            <div class="col-sm">
+              <img *ngIf="cliente?.image" src="http://localhost:8080/api/uploads/img/{{cliente.image}}" alt="Foto del cliente" class="img-thmbnail rounded">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
