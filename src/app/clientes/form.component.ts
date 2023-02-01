@@ -51,6 +51,7 @@ export class FormComponent implements OnInit {
 
   public updated(): void {
     console.log(this.client);
+    this.client.facturas = null;
       this.clienteService.update(this.client)
       .subscribe(json => {
         this.router.navigate(['/clientes'])

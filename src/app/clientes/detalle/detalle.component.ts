@@ -1,5 +1,8 @@
 import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit, Input } from '@angular/core';
+import { Factura } from 'src/app/facturas/models/factura';
+import { FacturasService } from 'src/app/facturas/services/facturas.service';
+import { AuthService } from 'src/app/usuarios/auth.service';
 import Swal from 'sweetalert2';
 import { Cliente } from '../cliente';
 import { ClienteService } from '../cliente.service';
@@ -16,7 +19,8 @@ export class DetalleComponent implements OnInit {
   selectedPhoto: File;
   progress: number = 0;
 
-  constructor(private clienteService: ClienteService, public modalService: ModalService) { }
+  constructor(private clienteService: ClienteService, public modalService: ModalService,
+     public authService: AuthService, private facturaService: FacturasService) { }
 
   ngOnInit() {}
 
@@ -56,6 +60,33 @@ export class DetalleComponent implements OnInit {
     this.modalService.closeModal();
     this.selectedPhoto = null;
     this.progress = 0;
+  }
+
+  delete(factura: Factura): void{
+    Swal.fire({
+      title: '¿Está seguro',
+      text: `¿Seguro que desea eliminar la factura ${factura.description}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.facturaService.delete(factura.id).subscribe(
+          response => {
+            this.cliente.facturas = this.cliente.facturas.filter(f => f !== factura)
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+          }
+        )
+
+      }
+    })
   }
 
 }
